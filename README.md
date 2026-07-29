@@ -1,6 +1,9 @@
 # 🛡️ VAULT (VLT) — Core C++ Daemon, CLI & RPC Server
 
-[![Official Website](https://img.shields.io/badge/Website-vaultapp.space-00f2fe?style=for-the-badge&logo=googlechrome&logoColor=white)](https://vaultapp.space)
+[![Website](https://img.shields.io/badge/Website-vaultapp.space-00f2fe?style=for-the-badge&logo=googlechrome&logoColor=white)](https://vaultapp.space)
+[![X / Twitter](https://img.shields.io/badge/X%2F%20Twitter-@VaultMe-1DA1F2?style=for-the-badge&logo=x&logoColor=white)](https://x.com/VaultMe)
+[![Telegram](https://img.shields.io/badge/Telegram-@Vault__Space-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/Vault_Space)
+[![Discord](https://img.shields.io/badge/Discord-Join_Community-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/VZyvT)
 [![Blockchain Explorer](https://img.shields.io/badge/Explorer-8.229.216.134%3A3000-7f00ff?style=for-the-badge&logo=express&logoColor=white)](http://8.229.216.134:3000)
 [![Desktop GUI Wallets](https://img.shields.io/badge/GUI_Wallets-vault--wallets-10b981?style=for-the-badge&logo=github&logoColor=white)](https://github.com/vaultapp-space/vault-wallets)
 [![License](https://img.shields.io/badge/License-BSD_3_Clause-ff6b6b?style=for-the-badge&logo=open-source-initiative&logoColor=white)](LICENSE)
@@ -8,6 +11,17 @@
 Welcome to the official repository for the **VAULT (VLT)** core C++ cryptocurrency implementation — including the full node daemon (`vaultd`), command-line wallet (`vault-wallet-cli`), and JSON-RPC server (`vault-wallet-rpc`).
 
 VAULT is an untraceable, privacy-centric digital currency built on CryptoNote and Ring Confidential Transactions (RingCT).
+
+---
+
+## 🌐 Official Channels & Social Links
+
+- **🌐 Website**: [https://vaultapp.space](https://vaultapp.space)
+- **𝕏 / Twitter**: [@VaultMe](https://x.com/VaultMe)
+- **💬 Telegram Community**: [@Vault_Space](https://t.me/Vault_Space)
+- **👾 Discord Server**: [Join Discord Community](https://discord.gg/VZyvT)
+- **🔍 Block Explorer**: [http://8.229.216.134:3000](http://8.229.216.134:3000)
+- **💼 Desktop Core GUI Wallets**: [https://github.com/vaultapp-space/vault-wallets](https://github.com/vaultapp-space/vault-wallets)
 
 ---
 
@@ -122,15 +136,6 @@ For a modern, pure pitch-black graphical desktop experience on **macOS** and **W
 
 👉 **[VAULT Desktop GUI Wallet Repository](https://github.com/vaultapp-space/vault-wallets)**
 👉 **[Download Latest Releases (v1.1.0)](https://github.com/vaultapp-space/vault-wallets/releases)**
-
----
-
-## 🌐 Official Links & Community
-
-- **Official Website**: [https://vaultapp.space](https://vaultapp.space)
-- **Block Explorer**: [http://8.229.216.134:3000](http://8.229.216.134:3000)
-- **GitHub Organization**: [https://github.com/vaultapp-space](https://github.com/vaultapp-space)
-- **Contact / Support**: `dev@vaultapp.space`
 
 ---
 
