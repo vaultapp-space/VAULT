@@ -1,683 +1,139 @@
-# Vault
+# 🛡️ VAULT (VLT) — Core C++ Daemon, CLI & RPC Server
 
-Copyright (c) 2014-2026, The Vault Project
-Portions Copyright (c) 2012-2013 The Cryptonote developers.
+[![Official Website](https://img.shields.io/badge/Website-vaultapp.space-00f2fe?style=for-the-badge&logo=googlechrome&logoColor=white)](https://vaultapp.space)
+[![Blockchain Explorer](https://img.shields.io/badge/Explorer-8.229.216.134%3A3000-7f00ff?style=for-the-badge&logo=express&logoColor=white)](http://8.229.216.134:3000)
+[![Desktop GUI Wallets](https://img.shields.io/badge/GUI_Wallets-vault--wallets-10b981?style=for-the-badge&logo=github&logoColor=white)](https://github.com/vaultapp-space/vault-wallets)
+[![License](https://img.shields.io/badge/License-BSD_3_Clause-ff6b6b?style=for-the-badge&logo=open-source-initiative&logoColor=white)](LICENSE)
 
-## Table of Contents
+Welcome to the official repository for the **VAULT (VLT)** core C++ cryptocurrency implementation — including the full node daemon (`vaultd`), command-line wallet (`vault-wallet-cli`), and JSON-RPC server (`vault-wallet-rpc`).
 
-  - [Development resources](#development-resources)
-  - [Vulnerability response](#vulnerability-response)
-  - [Research](#research)
-  - [Announcements](#announcements)
-  - [Introduction](#introduction)
-  - [About this project](#about-this-project)
-  - [Supporting the project](#supporting-the-project)
-  - [License](#license)
-  - [Contributing](#contributing)
-  - [Scheduled software/network upgrades](#scheduled-softwarenetwork-upgrades)
-  - [Release staging schedule and protocol](#release-staging-schedule-and-protocol)
-  - [Compiling Vault from source](#compiling-vault-from-source)
-    - [Dependencies](#dependencies)
-    - [Guix builds](#guix-builds)
-  - [Installing Vault from a package](#installing-vault-from-a-package)
-  - [Running vaultd](#running-vaultd)
-  - [Internationalization](#internationalization)
-  - [Using Tor](#using-tor)
-  - [Pruning](#pruning)
-  - [Debugging](#debugging)
-  - [Known issues](#known-issues)
+VAULT is an untraceable, privacy-centric digital currency built on CryptoNote and Ring Confidential Transactions (RingCT).
 
-## Development resources
+---
 
-- Web: [vaultapp.space](https://vaultapp.space)
-- Mail: [dev@vaultapp.space](mailto:dev@vaultapp.space)
-- GitHub: [https://github.com/vault-project/vault](https://github.com/vault-project/vault)
-- IRC: [#vault-dev on Libera](https://web.libera.chat/#vault-dev)
-- It is HIGHLY recommended that you join the #vault-dev IRC channel if you are developing software that uses Vault. Due to the nature of this open source software project, joining this channel and idling is the best way to stay updated on best practices and new developments in the Vault ecosystem. All you need to do is join the IRC channel and idle to stay updated with the latest in Vault development. If you do not, you risk wasting resources on developing integrations that are not compatible with the Vault network. The Vault core team and community continuously make efforts to communicate updates, developments, and documentation via other platforms – but for the best information, you need to talk to other Vault developers, and they are on IRC. #vault-dev is about Vault development, not getting help about using Vault, or help about development of other software, including yours, unless it also pertains to Vault code itself. For these cases, checkout #vault.
+## 🌟 About VAULT (VLT)
 
-## Vulnerability response
+VAULT (`VLT`) is designed for untraceable, borderless, instant private payments. Every transaction on the VAULT network is cryptographically protected by default:
 
-- Our [Vulnerability Response Process](https://github.com/vault-project/meta/blob/master/VULNERABILITY_RESPONSE_PROCESS.md) encourages responsible disclosure
-- We are also available via [HackerOne](https://hackerone.com/vault)
-- Vault is continuously fuzzed by [OSS-Fuzz](https://introspector.oss-fuzz.com/project-profile?project=vault)
+- **🔒 Ring Confidential Transactions (RingCT)**: Conceals transaction amounts and inputs/outputs.
+- **🛡️ Stealth Addresses**: Generates dynamic, one-time destination keys (`d5...`) for total receiver anonymity.
+- **⚡ Fast 60-Second Blocks**: High transaction throughput and low latency block confirmations.
+- **⛏️ CPU-Friendly Mining**: Decentralized consensus designed for ordinary CPU hardware.
 
-## Research
+---
 
-The [Vault Research Lab](https://www.vaultapp.space/resources/research-lab/) is an open forum where the community coordinates research into Vault cryptography, protocols, fungibility, analysis, and more. We welcome collaboration and contributions from outside researchers! Because not all Lab work and publications are distributed as traditional preprints or articles, they may be easy to miss if you are conducting literature reviews for your own Vault research. You are encouraged to get in touch with the Vault research community if you have questions, wish to collaborate, or would like guidance to help avoid unnecessarily duplicating earlier or known work.
+## ⚙️ Core Technical Specifications
 
-The Vault research community is available on IRC in [#vault-research-lab on Libera](https://web.libera.chat/#vault-research-lab), which is also accessible via Matrix.
+| Parameter | Value | Description |
+| :--- | :--- | :--- |
+| **Coin Name** | **VAULT** | Privacy Cryptocurrency |
+| **Ticker** | `VLT` | Symbol |
+| **Address Prefix** | `d5` | Mainnet standard address prefix |
+| **Target Block Time** | `60 seconds` | Block generation frequency |
+| **Atomic Unit Scale** | `10^12` | 1 VLT = 1,000,000,000,000 atomic units |
+| **P2P Port** | `29080` | Peer-to-peer network protocol |
+| **Daemon RPC Port** | `29081` | Core node JSON-RPC interface |
+| **ZMQ Port** | `29082` | ZeroMQ pub/sub message queue |
+| **Wallet RPC Port** | `29083` | Wallet RPC server port |
+| **Explorer Web Port** | `3000` | Web block explorer |
+| **Seed Node Host** | `8.229.216.134:29081` | Official seed & RPC node |
 
-## Announcements
+---
 
-- You can subscribe to an [announcement listserv](https://lists.vaultapp.space) to get critical announcements from the Vault core team. The announcement list can be very helpful for knowing when software updates are needed.
+## 🛠️ Compiling VAULT from Source
 
-## Introduction
+### 🍎 1. macOS (Apple Silicon ARM64 & Intel)
 
-Vault is a private, secure, untraceable, decentralised digital currency. You are your bank, you control your funds, and nobody can trace your transfers unless you allow them to do so.
-
-**Privacy:** Vault uses a cryptographically sound system to allow you to send and receive funds without your transactions being easily revealed on the blockchain (the ledger of transactions that everyone has). This ensures that your purchases, receipts, and all transfers remain private by default.
-
-**Security:** Using the power of a distributed peer-to-peer consensus network, every transaction on the network is cryptographically secured. Individual wallets have a 25-word mnemonic seed that is only displayed once and can be written down to backup the wallet. Wallet files should be encrypted with a strong passphrase to ensure they are useless if ever stolen.
-
-**Untraceability:** By taking advantage of ring signatures, a special property of a certain type of cryptography, Vault is able to ensure that transactions are not only untraceable but have an optional measure of ambiguity that ensures that transactions cannot easily be tied back to an individual user or computer.
-
-**Decentralization:** The utility of Vault depends on its decentralised peer-to-peer consensus network - anyone should be able to run the vault software, validate the integrity of the blockchain, and participate in all aspects of the vault network using consumer-grade commodity hardware. Decentralization of the vault network is maintained by software development that minimizes the costs of running the vault software and inhibits the proliferation of specialized, non-commodity hardware.
-
-## About this project
-
-This is the core implementation of Vault. It is open source and completely free to use without restrictions, except for those specified in the license agreement below. There are no restrictions on anyone creating an alternative implementation of Vault that uses the protocol and network in a compatible manner.
-
-As with many development projects, the repository on GitHub is considered to be the "staging" area for the latest changes. Before changes are merged into that branch on the main repository, they are tested by individual developers in their own branches, submitted as a pull request, and then subsequently tested by contributors who focus on testing and code reviews. That having been said, the repository should be carefully considered before using it in a production environment, unless there is a patch in the repository for a particular show-stopping issue you are experiencing. It is generally a better idea to use a tagged release for stability.
-
-**Anyone is welcome to contribute to Vault's codebase!** If you have a fix or code change, feel free to submit it as a pull request directly to the "master" branch. In cases where the change is relatively small or does not affect other parts of the codebase, it may be merged in immediately by any one of the collaborators. On the other hand, if the change is particularly large or complex, it is expected that it will be discussed at length either well in advance of the pull request being submitted, or even directly on the pull request.
-
-## Supporting the project
-
-Vault is a 100% community-sponsored endeavor. If you want to join our efforts, the easiest thing you can do is support the project financially. Both Vault and Bitcoin donations can be made to **donate.vaultapp.space** if using a client that supports the [OpenAlias](https://openalias.org) standard. Alternatively, you can send VLT to the Vault donation address via the `donate` command (type `help` in the command-line wallet for details).
-
-The Vault donation address is:  
-`888tNkZrPN6JsEgekjMnABU4TBzc2Dt29EPAvkRxbANsAnjyPbb3iQ1YBRk1UXcdRsiKc9dhwMVgN5S9cQUiyoogDavup3H`  
-Viewkey:  
-`f359631075708155cc3d92a32b75a7d02a5dcf27756707b47a2b31b21c389501`  
-Base address for restoring with address and viewkey:  
-`44AFFq5kSiGBoZ4NMDwYtN18obc8AemS33DBLWs3H7otXft3XjrpDtQGv7SqSsaBYBb98uNbr2VBBEt7f2wfn3RVGQBEP3A`
-
-The Bitcoin donation address is:  
-`1KTexdemPdxSBcG55heUuTjDRYqbC5ZL8H`
-
-Core development funding and/or some supporting services are also graciously provided by [sponsors](https://www.vaultapp.space/community/sponsorships/):
-
-[<img height="26" hspace="6" src="https://www.vaultapp.space/img/sponsors/tarilabs.png"/>](https://tarilabs.com/)
-[<img height="30" hspace="6" src="https://www.vaultapp.space/img/sponsors/macstadium.png"/>](https://www.macstadium.com/)
-[<img height="26" hspace="6" src="https://www.vaultapp.space/img/sponsors/cakewallet.png"/>](https://cakewallet.com/)
-[<img height="30" hspace="6" src="https://www.vaultapp.space/img/sponsors/symas.png"/>](https://symas.com/)
-[<img height="30" hspace="6" src="https://www.vaultapp.space/img/sponsors/cypherstack.png"/>](https://cypherstack.com/)
-
-## License
-
-See [LICENSE](LICENSE).
-
-## Contributing
-
-If you want to help out, see [CONTRIBUTING](docs/CONTRIBUTING.md) for a set of guidelines.
-
-## Scheduled software/network upgrades
-
-Vault uses a scheduled software/network upgrade (hard fork) mechanism to implement new features into the Vault software and network. This means that users of Vault (end users and service providers) should run current versions and upgrade their software when new releases are available. Software upgrades occur when new features are developed and implemented in the codebase. Network upgrades occur in tandem with software upgrades that modify the consensus rules of the Vault network. The required software for network upgrades will be available prior to the scheduled network upgrade date. Please check the repository prior to this date for the proper Vault software version. Below is the historical schedule and the projected schedule for the next upgrade.
-
-Dates are provided in the format YYYY-MM-DD. The "Minimum" is the software version that follows the new consensus rules. The "Recommended" version may include bug fixes and other new features that do not affect the consensus rules.
-
-| Software upgrade block height  | Date       | Fork version      | Minimum Vault version | Recommended Vault version | Details                                                                            |
-| ------------------------------ | -----------| ----------------- | ---------------------- | -------------------------- | ---------------------------------------------------------------------------------- |
-| 1009827                        | 2016-03-22 | v2                | v0.9.4                 | v0.9.4                     | Allow only >= ringsize 3, blocktime = 120 seconds, fee-free blocksize 60 kb       |
-| 1141317                        | 2016-09-21 | v3                | v0.9.4                 | v0.10.0                    | Splits coinbase into denominations  |
-| 1220516                        | 2017-01-05 | v4                | v0.10.1                | v0.10.2.1                  | Allow normal and RingCT transactions |
-| 1288616                        | 2017-04-15 | v5                | v0.10.3.0              | v0.10.3.1                  | Adjusted minimum blocksize and fee algorithm      |
-| 1400000                        | 2017-09-16 | v6                | v0.11.0.0              | v0.11.0.0                  | Allow only RingCT transactions, allow only >= ringsize 5      |
-| 1546000                        | 2018-04-06 | v7                | v0.12.0.0              | v0.12.3.0                  | Cryptonight variant 1, ringsize >= 7, sorted inputs
-| 1685555                        | 2018-10-18 | v8                | v0.13.0.0              | v0.13.0.4                  | max transaction size at half the penalty free block size, bulletproofs enabled, cryptonight variant 2, fixed ringsize [11](https://youtu.be/KOO5S4vxi0o)
-| 1686275                        | 2018-10-19 | v9                | v0.13.0.0              | v0.13.0.4                  | bulletproofs required
-| 1788000                        | 2019-03-09 | v10               | v0.14.0.0              | v0.14.1.2                  | New PoW based on Cryptonight-R, new block weight algorithm, slightly more efficient RingCT format
-| 1788720                        | 2019-03-10 | v11               | v0.14.0.0              | v0.14.1.2                  | forbid old RingCT transaction format
-| 1978433                        | 2019-11-30 | v12               | v0.15.0.0              | v0.16.0.0                  | New PoW based on RandomX, only allow >= 2 outputs, change to the block median used to calculate penalty, v1 coinbases are forbidden, rct sigs in coinbase forbidden, 10 block lock time for incoming outputs
-| 2210000                        | 2020-10-17 | v13               | v0.17.0.0              | v0.17.3.2                  | New CLSAG transaction format
-| 2210720                        | 2020-10-18 | v14               | v0.17.1.1              | v0.17.3.2                  | forbid old MLSAG transaction format
-| 2688888                        | 2022-08-13 | v15               | v0.18.0.0              | v0.18.5.1                  | ringsize = 16, bulletproofs+, view tags, adjusted dynamic block weight algorithm
-| 2689608                        | 2022-08-14 | v16               | v0.18.0.0              | v0.18.5.1                  | forbid old v14 transaction format
-| XXXXXXX                        | XXX-XX-XX | XXX                | vX.XX.X.X              | vX.XX.X.X                  | XXX |
-
-X's indicate that these details have not been determined as of commit date.
-
-## Release staging schedule and protocol
-
-Approximately three months prior to a scheduled software upgrade, a branch from master will be created with the new release version tag. Pull requests that address bugs should then be made to both master and the new release branch. Pull requests that require extensive review and testing (generally, optimizations and new features) should *not* be made to the release branch.
-
-## Compiling Vault from source
-
-### Dependencies
-
-The following table summarizes the tools and libraries required to build. A few of the libraries are also included in this repository (marked as "Vendored"). By default, the build uses the library installed on the system and ignores the vendored sources. However, if no library is found installed on the system, then the vendored source will be built and used. The vendored sources are also used for statically-linked builds because distribution packages often include only shared library binaries (`.so`) but not static library archives (`.a`).
-
-| Dep          | Min. version  | Vendored | Debian/Ubuntu pkg    | Arch pkg     | Void pkg           | Fedora pkg          | Optional | Purpose         |
-| ------------ | ------------- | -------- | -------------------- | ------------ | ------------------ | ------------------- | -------- | --------------- |
-| GCC          | 7             | NO       | `build-essential`    | `base-devel` | `base-devel`       | `gcc`               | NO       |                 |
-| CMake        | 3.10          | NO       | `cmake`              | `cmake`      | `cmake`            | `cmake`             | NO       |                 |
-| pkg-config   | any           | NO       | `pkg-config`         | `base-devel` | `base-devel`       | `pkgconf`           | NO       |                 |
-| Boost        | 1.69          | NO       | `libboost-all-dev`   | `boost`      | `boost-devel`      | `boost-devel`       | NO       | C++ libraries   |
-| OpenSSL      | 1.1.1         | NO       | `libssl-dev`         | `openssl`    | `openssl-devel`    | `openssl-devel`     | NO       | cryptography    |
-| libzmq       | 4.2.0         | NO       | `libzmq3-dev`        | `zeromq`     | `zeromq-devel`     | `zeromq-devel`      | NO       | ZeroMQ library  |
-| libunbound   | 1.4.16        | NO       | `libunbound-dev`     | `unbound`    | `unbound-devel`    | `unbound-devel`     | NO       | DNS resolver    |
-| libsodium    | ?             | NO       | `libsodium-dev`      | `libsodium`  | `libsodium-devel`  | `libsodium-devel`   | NO       | cryptography    |
-| libunwind    | any           | NO       | `libunwind-dev`      | `libunwind`  | `libunwind-devel`  | `libunwind-devel`   | YES      | Stack traces    |
-| libreadline  | 6.3.0         | NO       | `libreadline-dev`    | `readline`   | `readline-devel`   | `readline-devel`    | YES      | Input editing   |
-| GTest        | 1.5           | YES      | `libgtest-dev`       | `gtest`      | `gtest-devel`      | `gtest-devel`       | YES      | Test suite      |
-| ccache       | any           | NO       | `ccache`             | `ccache`     | `ccache`           | `ccache`            | YES      | Compil. cache   |
-| Doxygen      | any           | NO       | `doxygen`            | `doxygen`    | `doxygen`          | `doxygen`           | YES      | Documentation   |
-| Graphviz     | any           | NO       | `graphviz`           | `graphviz`   | `graphviz`         | `graphviz`          | YES      | Documentation   |
-| lrelease     | ?             | NO       | `qttools5-dev-tools` | `qt5-tools`  | `qt5-tools`        | `qt5-linguist`      | YES      | Translations    |
-| libhidapi    | ?             | NO       | `libhidapi-dev`      | `hidapi`     | `hidapi-devel`     | `hidapi-devel`      | YES      | Hardware wallet |
-| libusb       | ?             | NO       | `libusb-1.0-0-dev`   | `libusb`     | `libusb-devel`     | `libusb1-devel`     | YES      | Hardware wallet |
-| libprotobuf  | ?             | NO       | `libprotobuf-dev`    | `protobuf`   | `protobuf-devel`   | `protobuf-devel`    | YES      | Hardware wallet |
-| protoc       | ?             | NO       | `protobuf-compiler`  | `protobuf`   | `protobuf`         | `protobuf-compiler` | YES      | Hardware wallet |
-
-Install all dependencies at once on Debian/Ubuntu:
-
-```
-sudo apt update && sudo apt install build-essential cmake pkg-config libssl-dev libzmq3-dev libunbound-dev libsodium-dev libunwind-dev libreadline-dev qttools5-dev-tools libhidapi-dev libusb-1.0-0-dev libprotobuf-dev protobuf-compiler libboost-chrono-dev libboost-date-time-dev libboost-filesystem-dev libboost-locale-dev libboost-program-options-dev libboost-regex-dev libboost-serialization-dev libboost-system-dev libboost-thread-dev python3 ccache doxygen graphviz git curl
-```
-
-Install all dependencies at once on Arch:
-```
-sudo pacman -Syu --needed base-devel cmake boost boost-libs openssl zeromq unbound libsodium libunwind readline python ccache doxygen graphviz qt5-tools hidapi libusb protobuf
-```
-
-Install all dependencies at once on Fedora:
-```
-sudo dnf install gcc gcc-c++ cmake pkgconf boost-devel openssl-devel zeromq-devel unbound-devel libsodium-devel libunwind-devel readline-devel ccache doxygen graphviz qt5-linguist hidapi-devel libusb1-devel protobuf-devel protobuf-compiler
-```
-
-Install all dependencies at once on openSUSE:
-
-```
-sudo zypper ref && sudo zypper in cppzmq-devel libboost_chrono-devel libboost_date_time-devel libboost_filesystem-devel libboost_locale-devel libboost_program_options-devel libboost_regex-devel libboost_serialization-devel libboost_system-devel libboost_thread-devel libsodium-devel libunwind-devel unbound-devel cmake doxygen ccache fdupes gcc-c++ libevent-devel libopenssl-devel pkgconf-pkg-config readline-devel libqt5-qttools-devel patterns-devel-C-C++-devel_C_C++
-```
-
-Install all dependencies at once on macOS with the provided Brewfile:
-
-```
-brew update && brew bundle --file=contrib/brew/Brewfile
-```
-
-FreeBSD one-liner required to build dependencies:
-
-```
-pkg install git gmake cmake pkgconf boost-libs libzmq4 libsodium unbound
-```
-
-### Cloning the repository
-
-Clone recursively to pull-in needed submodule(s):
-
-```
-git clone --recursive https://github.com/vault-project/vault
-```
-
-If you already have a repo cloned, initialize and update:
-
-```
-cd vault && git submodule init && git submodule update
-```
-
-*Note*: If there are submodule differences between branches, you may need to use `git submodule sync && git submodule update --init` after changing branches to build successfully.
-
-### Build instructions
-
-Vault uses the CMake build system and a top-level [Makefile](Makefile) that invokes cmake commands as needed.
-
-#### On Linux and macOS
-
-* Install the dependencies
-* Change to the root of the source code directory, change to the most recent release branch, and build:
-
-    ```bash
-    cd vault
-    git checkout release-v0.18
-    make
-    ```
-
-    *Optional*: If your machine has several cores and enough memory, enable parallel build by running `make -j<number of threads>` instead of `make`. For this to be worthwhile, allow one core and about 2GB of RAM per thread.
-
-    *Note*: The instructions above will compile the most stable release of the Vault software. If you would like to use and test the most recent software, use `git checkout master`. The master branch may contain updates that are both unstable and incompatible with release software, though testing is always encouraged.
-
-* The resulting executables can be found in `build/release/bin`
-
-* Add `PATH="$PATH:$HOME/vault/build/release/bin"` to `.profile`
-
-* Run Vault with `vaultd --detach`
-
-* **Optional**: build and run the test suite to verify the binaries:
-
-    ```bash
-    make release-test
-    ```
-
-    *NOTE*: `core_tests` test may take a few hours to complete.
-
-* **Optional**: to build binaries suitable for debugging:
-
-    ```bash
-    make debug
-    ```
-
-* **Optional**: build documentation in `doc/html` (omit `HAVE_DOT=YES` if `graphviz` is not installed):
-
-    ```bash
-    HAVE_DOT=YES doxygen Doxyfile
-    ```
-
-* **Optional**: use ccache not to rebuild translation units, that haven't really changed. Vault's CMakeLists.txt file automatically handles it
-
-    ```bash
-    sudo apt install ccache
-    ```
-
-#### On the Raspberry Pi
-
-Tested on a Raspberry Pi 5B with a clean installation of Raspberry Pi OS (64-bit) with Debian 12 from https://www.raspberrypi.com/software/operating-systems/.
-
-* `apt-get update && apt-get upgrade` to install the latest software
-
-* Install the dependencies for Vault from the 'Debian' column in the table above.
-
-* **Optional**: increase the system swap size:
-
-    ```bash
-    sudo /etc/init.d/dphys-swapfile stop
-    sudo nano /etc/dphys-swapfile
-    CONF_SWAPSIZE=2048
-    sudo /etc/init.d/dphys-swapfile start
-    ```
-
-* If using an external hard disk without an external power supply, ensure it gets enough power to avoid hardware issues when syncing, by adding the line "usb_max_current_enable=1" to /boot/firmware/config.txt
-
-* Clone Vault and checkout the most recent release version:
-
-    ```bash
-    git clone --recursive https://github.com/vault-project/vault.git
-    cd vault
-    git checkout v0.18.5.1
-    ```
-
-* Build:
-
-    ```bash
-    USE_SINGLE_BUILDDIR=1 make release
-    ```
-
-* Wait a few hours
-
-* The resulting executables can be found in `build/release/bin`
-
-* Add `export PATH="$PATH:$HOME/vault/build/release/bin"` to `$HOME/.profile`
-
-* Run `source $HOME/.profile`
-
-* Run Vault with `vaultd --detach`
-
-* You may wish to reduce the size of the swap file after the build has finished, and delete the boost directory from your home directory
-
-#### On Windows:
-
-Binaries for Windows can be built on Windows using the MinGW toolchain within [MSYS2 environment](https://www.msys2.org). The MSYS2 environment emulates a POSIX system. The toolchain runs within the environment and *cross-compiles* binaries that can run outside of the environment as a regular Windows application.
-
-**Preparing the build environment**
-
-* Download and install the [MSYS2 installer](https://www.msys2.org). Installing MSYS2 requires 64-bit Windows 10 or newer.
-* Open the MSYS shell via the `MSYS2 MSYS` shortcut
-* Update packages using pacman:
-
-    ```bash
-    pacman -Syu
-    ```
-
-* Install dependencies:
-
-    ```bash
-    pacman -S mingw-w64-x86_64-toolchain make mingw-w64-x86_64-cmake mingw-w64-x86_64-boost mingw-w64-x86_64-openssl mingw-w64-x86_64-zeromq mingw-w64-x86_64-libsodium mingw-w64-x86_64-hidapi mingw-w64-x86_64-unbound
-    ```
-
-* Open the MingW shell via `MSYS2 MINGW64` shortcut.
-
-**Cloning**
-
-* To git clone, run:
-
-    ```bash
-    git clone --recursive https://github.com/vault-project/vault.git
-    ```
-
-**Building**
-
-* Change to the cloned directory, run:
-
-    ```bash
-    cd vault
-    ```
-
-* If you would like a specific [version/tag](https://github.com/vault-project/vault/tags), do a git checkout for that version. eg. 'v0.18.5.1'. If you don't care about the version and just want binaries from master, skip this step:
-
-    ```bash
-    git checkout v0.18.5.1
-    ```
-
-* To build Vault, run:
-
-    ```bash
-    make release-static -j $(nproc)
-    ```
-
-   The resulting executables can be found in `build/release/bin`
-
-* **Optional**: to build Windows binaries suitable for debugging, run:
-
-    ```bash
-    make debug -j $(nproc)
-    ```
-
-   The resulting executables can be found in `build/debug/bin`
-
-### On FreeBSD:
-
-The project can be built from scratch by following instructions for Linux above (but use `gmake` instead of `make`). If you are running Vault in a jail, you need to add `sysvsem="new"` to your jail configuration, otherwise lmdb will throw the error message: `Failed to open lmdb environment: Function not implemented`.
-
-Vault is also available as a port or package as `vault-cli`.
-
-### On OpenBSD:
-
-You will need to add a few packages to your system. `pkg_add cmake gmake zeromq libiconv boost libunbound`.
-
-The `doxygen` and `graphviz` packages are optional and require the xbase set. Running the test suite also requires `py3-requests` package.
-
-Build vault: `gmake`
-
-Note: you may encounter the following error when compiling the latest version of Vault as a normal user:
-
-```
-LLVM ERROR: out of memory
-c++: error: unable to execute command: Abort trap (core dumped)
-```
-
-Then you need to increase the data ulimit size to 2GB and try again: `ulimit -d 2000000`
-
-### On NetBSD:
-
-Check that the dependencies are present: `pkg_info -c libexecinfo boost-headers boost-libs protobuf readline libusb1 zeromq git-base pkgconf gmake cmake | more`, and install any that are reported missing, using `pkg_add` or from your pkgsrc tree. Readline is optional but worth having.
-
-Third-party dependencies are usually under `/usr/pkg/`, but if you have a custom setup, adjust the "/usr/pkg" (below) accordingly.
-
-Clone the vault repository recursively and checkout the most recent release as described above. Then build vault: `gmake BOOST_ROOT=/usr/pkg LDFLAGS="-Wl,-R/usr/pkg/lib" release`. The resulting executables can be found in `build/NetBSD/[Release version]/Release/bin/`.
-
-### On Solaris:
-
-The default Solaris linker can't be used, you have to install GNU ld, then run cmake manually with the path to your copy of GNU ld:
-
+#### Dependencies (Homebrew)
 ```bash
-mkdir -p build/release
-cd build/release
-cmake -DCMAKE_LINKER=/path/to/ld -D CMAKE_BUILD_TYPE=Release ../..
-cd ../..
+brew update
+brew install cmake boost openssl@3 unbound zeromq hidapi libsodium libusb ccache pkg-config
 ```
 
-Then you can run make as usual.
-
-### Cross Compiling
-
-You can also cross-compile static binaries on Linux for Windows and macOS with the `depends` system.
-
-* `make depends target=x86_64-linux-gnu` for 64-bit linux binaries.
-* `make depends target=x86_64-w64-mingw32` for 64-bit windows binaries.
-  * Requires: `g++-mingw-w64-x86-64`
-  * You also need to run:
-    ```shell
-    update-alternatives --set x86_64-w64-mingw32-g++ $(which x86_64-w64-mingw32-g++-posix) && \
-    update-alternatives --set x86_64-w64-mingw32-gcc $(which x86_64-w64-mingw32-gcc-posix)
-    ```
-* `make depends target=x86_64-apple-darwin` for Intel macOS binaries.
-  * Requires: `clang-19 lld-19`
-* `make depends target=arm64-apple-darwin` for Apple Silicon macOS binaries.
-  * Requires: `clang-19 lld-19`
-  * You also need to run:
-    ```shell
-    export PATH="/usr/lib/llvm-19/bin/:$PATH"
-    ```
-* `make depends target=i686-linux-gnu` for 32-bit linux binaries.
-  * Requires: `g++-multilib bc`
-* `make depends target=i686-w64-mingw32` for 32-bit windows binaries.
-  * Requires: `python3 g++-mingw-w64-i686`
-* `make depends target=arm-linux-gnueabihf` for armv7 binaries.
-  * Requires: `g++-arm-linux-gnueabihf`
-* `make depends target=aarch64-linux-gnu` for armv8 binaries.
-  * Requires: `g++-aarch64-linux-gnu`
-* `make depends target=riscv64-linux-gnu` for RISC V 64 bit binaries.
-  * Requires: `g++-riscv64-linux-gnu`
-* `make depends target=x86_64-unknown-freebsd` for freebsd binaries.
-  * Requires: `clang`
-* `make depends target=arm-linux-android` for 32bit android binaries
-* `make depends target=aarch64-linux-android` for 64bit android binaries
-
-The required packages are the names for each toolchain on apt. Depending on your distro, they may have different names.
-
-Using `depends` might also be easier to compile Vault on Windows than using MSYS. Activate Windows Subsystem for Linux (WSL) with a distro (for example Ubuntu), install the apt build-essentials and follow the `depends` steps as depicted above.
-
-The produced binaries still link libc dynamically. If the binary is compiled on a current distribution, it might not run on an older distribution with an older installation of libc.
-
-### Trezor hardware wallet support
-
-If you have an issue with building Vault with Trezor support, you can disable it by setting `USE_DEVICE_TREZOR=OFF`
-
+#### Build Instructions
 ```bash
-USE_DEVICE_TREZOR=OFF make release
+git clone https://github.com/vaultapp-space/VAULT.git
+cd VAULT
+mkdir -p build/release && cd build/release
+cmake -D CMAKE_BUILD_TYPE=Release -D MANUAL_SUBMODULES=1 ../..
+make -j$(sysctl -n hw.ncpu)
 ```
 
-For more information, please check out Trezor [src/device_trezor/README.md](src/device_trezor/README.md).
+The compiled binaries will be located in `bin/`:
+- `vaultd` (Daemon executable)
+- `vault-wallet-cli` (Command-line wallet)
+- `vault-wallet-rpc` (Wallet RPC server)
 
-### Guix builds
+---
 
-See [contrib/guix/README.md](contrib/guix/README.md).
+### 🐧 2. Ubuntu / Debian Linux
 
-### Building and running vaultd with Docker
-
+#### Dependencies
 ```bash
-# Build image
-docker build -t vaultd .
-
-# Create a directory on the host for the blockchain
-mkdir -p /path/to/bitvault
-
-# Run it
-docker run -d --user $(id -u):$(id -g) -v /path/to/bitvault:/.bitvault -p 127.0.0.1:18080:18080 -p 127.0.0.1:18081:18081 vaultd
+sudo apt update
+sudo apt install -y build-essential cmake pkg-config libboost-all-dev libssl-dev libunbound-dev libzeromq3-dev libsodium-dev libhidapi-dev libusb-1.0-0-dev git
 ```
 
-## Installing Vault from a package
-
-**DISCLAIMER: These packages are not part of this repository or maintained by this project's contributors, and as such, do not go through the same review process to ensure their trustworthiness and security.**
-
-Packages are available for
-
-* Debian 12 (Bookworm) or later
-
-    ```bash
-    sudo apt install vault
-    ```
-  More info and versions in the [Debian package tracker](https://tracker.debian.org/pkg/vault).
-
-* Arch Linux:
-
-    ```bash
-    sudo pacman -S vault
-    ```
-
-* NixOS:
-
-    ```bash
-    nix-shell -p vault-cli
-    ```
-
-* Guix:
-
-    ```bash
-    guix package -i vault
-    ```
-
-* Alpine Linux:
-
-    ```bash
-    apk add vault
-    ```
-
-* macOS [(homebrew)](https://brew.sh/)
-    ```bash
-    brew install vault
-    ```
-
-Packaging for your favorite distribution would be a welcome contribution!
-
-## Running vaultd
-
-The build places the binary in `bin/` sub-directory within the build directory from which cmake was invoked (repository root by default). To run in the foreground:
-
+#### Build Instructions
 ```bash
-./bin/vaultd
+git clone https://github.com/vaultapp-space/VAULT.git
+cd VAULT
+mkdir -p build/release && cd build/release
+cmake -D CMAKE_BUILD_TYPE=Release -D MANUAL_SUBMODULES=1 ../..
+make -j$(nproc)
 ```
 
-To list all available options, run `./bin/vaultd --help`. Options can be specified either on the command line or in a configuration file passed by the `--config-file` argument. To specify an option in the configuration file, add a line with the syntax `argumentname=value`, where `argumentname` is the name of the argument without the leading dashes, for example, `log-level=1`.
+---
 
-To run in background:
+## 🚀 Running `vaultd` Daemon
 
+### Start Local Node Daemon
 ```bash
-./bin/vaultd --log-file vaultd.log --detach
+./bin/vaultd --data-dir ~/.vault-blockchain --rpc-bind-ip 127.0.0.1 --rpc-bind-port 29081 --non-interactive --log-level 1
 ```
 
-To run as a systemd service, copy [vaultd.service](utils/systemd/vaultd.service) to `/etc/systemd/system/` and [vaultd.conf](utils/conf/vaultd.conf) to `/etc/`. The [example service](utils/systemd/vaultd.service) assumes that the user `vault` exists and its home is the data directory specified in the [example config](utils/conf/vaultd.conf).
+### Common Command Line Options
+- `--data-dir <path>`: Specify local directory for LMDB blockchain database.
+- `--rpc-bind-ip <ip>`: Bind IP address for local JSON-RPC server (`127.0.0.1`).
+- `--rpc-bind-port <port>`: Port for JSON-RPC server (`29081`).
+- `--offline`: Run daemon in standalone mode without P2P network handshakes.
+- `--start-mining <d5...address>`: Enable local CPU solo mining to a recipient wallet address.
+- `--mining-threads <count>`: Set CPU thread count for local mining.
 
-If you're on Mac, you may need to add the `--max-concurrency 1` option to vault-wallet-cli, and possibly vaultd, if you get crashes refreshing.
+---
 
-## Internationalization
+## 💻 Running Command-Line Wallet (`vault-wallet-cli`)
 
-See [README.i18n.md](docs/README.i18n.md).
-
-## Using Tor
-
-> There is a new, still experimental, [integration with Tor](docs/ANONYMITY_NETWORKS.md). The feature allows connecting over IPv4 and Tor simultaneously - IPv4 is used for relaying blocks and relaying transactions received by peers whereas Tor is used solely for relaying transactions received over local RPC. This provides privacy and better protection against surrounding node (sybil) attacks.
-
-While Vault isn't made to integrate with Tor, it can be used wrapped with torsocks, by setting the following configuration parameters and environment variables:
-
-* `--p2p-bind-ip 127.0.0.1` on the command line or `p2p-bind-ip=127.0.0.1` in vaultd.conf to disable listening for connections on external interfaces.
-* If you use the wallet with a Tor daemon via the loopback IP (eg, 127.0.0.1:9050), then use `--untrusted-daemon` unless it is your own hidden service.
-
-Example command line to start vaultd through Tor:
-
+### Create a New Wallet
 ```bash
-vaultd --proxy 127.0.0.1:9050 --p2p-bind-ip 127.0.0.1
+./bin/vault-wallet-cli --daemon-address 127.0.0.1:29081 --generate-new-wallet my_vault_wallet
 ```
 
-A helper script is in contrib/tor/vault-over-tor.sh. It assumes Tor is installed already, and runs Tor and Vault with the right configuration.
-
-### Using Tor on Tails
-
-TAILS ships with a very restrictive set of firewall rules. Therefore, you need to add a rule to allow this connection too, in addition to telling torsocks to allow inbound connections. Full example:
-
+### Restore Wallet from 25-Word Mnemonic Seed
 ```bash
-sudo iptables -I OUTPUT 2 -p tcp -d 127.0.0.1 -m tcp --dport 18081 -j ACCEPT
-DNS_PUBLIC=tcp torsocks ./vaultd --p2p-bind-ip 127.0.0.1 --rpc-bind-ip 127.0.0.1 \
-    --data-dir /home/amnesia/Persistent/your/directory/to/the/blockchain
+./bin/vault-wallet-cli --daemon-address 8.229.216.134:29081 --restore-deterministic-wallet
 ```
 
-## Pruning
+---
 
-As of June 2026, the full Vault blockchain file is about 280 GB. One can store a pruned blockchain, which is about 95 GB. A pruned blockchain can only serve part of the historical chain data to other peers, but is otherwise identical in functionality to the full blockchain. To use a pruned blockchain, it is best to start the initial sync with `--prune-blockchain`. However, it is also possible to prune an existing blockchain using the `vault-blockchain-prune` tool or using the `--prune-blockchain` `vaultd` option with an existing chain. If an existing chain exists, pruning will temporarily require disk space to store both the full and pruned blockchains.
+## 🖥️ Desktop GUI Wallet
 
-For more detailed information see the ['Pruning' entry in the Vaultpedia](https://www.vaultapp.space/resources/vaultpedia/pruning.html)
+For a modern, pure pitch-black graphical desktop experience on **macOS** and **Windows**, download the pre-built desktop application:
 
-## Debugging
+👉 **[VAULT Desktop GUI Wallet Repository](https://github.com/vaultapp-space/vault-wallets)**
+👉 **[Download Latest Releases (v1.1.0)](https://github.com/vaultapp-space/vault-wallets/releases)**
 
-This section contains general instructions for debugging failed installs or problems encountered with Vault. First, ensure you are running the latest version built from the GitHub repo.
+---
 
-### Obtaining stack traces and core dumps on Unix systems
+## 🌐 Official Links & Community
 
-We generally use the tool `gdb` (GNU debugger) to provide stack trace functionality, and `ulimit` to provide core dumps in builds which crash or segfault.
+- **Official Website**: [https://vaultapp.space](https://vaultapp.space)
+- **Block Explorer**: [http://8.229.216.134:3000](http://8.229.216.134:3000)
+- **GitHub Organization**: [https://github.com/vaultapp-space](https://github.com/vaultapp-space)
+- **Contact / Support**: `dev@vaultapp.space`
 
-* To use `gdb` in order to obtain a stack trace for a build that has stalled:
+---
 
-Run the build.
+## 📄 License
 
-Once it stalls, enter the following command:
-
-```bash
-gdb /path/to/vaultd `pidof vaultd`
-```
-
-Type `thread apply all bt` within gdb in order to obtain the stack trace
-
-* If however the core dumps or segfaults:
-
-Enter `ulimit -c unlimited` on the command line to enable unlimited filesizes for core dumps
-
-Enter `echo core | sudo tee /proc/sys/kernel/core_pattern` to stop cores from being hijacked by other tools
-
-Run the build.
-
-When it terminates with an output along the lines of "Segmentation fault (core dumped)", there should be a core dump file in the same directory as vaultd. It may be named just `core`, or `core.xxxx` with numbers appended.
-
-You can now analyse this core dump with `gdb` as follows:
-
-```bash
-gdb /path/to/vaultd /path/to/dumpfile
-```
-
-Print the stack trace with `bt`
-
- * If a program crashed and cores are managed by systemd, the following can also get a stack trace for that crash:
-
-```bash
-coredumpctl -1 gdb
-```
-
-#### To run Vault within gdb:
-
-Type `gdb /path/to/vaultd`
-
-Pass command-line options with `--args` followed by the relevant arguments
-
-Type `run` to run vaultd
-
-### Analysing memory corruption
-
-There are two tools available:
-
-#### ASAN
-
-Configure Vault with the -D SANITIZE=ON cmake flag, eg:
-
-```bash
-cd build/debug && cmake -D SANITIZE=ON -D CMAKE_BUILD_TYPE=Debug ../..
-```
-
-You can then run the vault tools normally. Performance will typically halve.
-
-#### valgrind
-
-Install valgrind and run as `valgrind /path/to/vaultd`. It will be very slow.
-
-### LMDB
-
-Instructions for debugging suspected blockchain corruption as per @HYC
-
-There is an `mdb_stat` command in the LMDB source that can print statistics about the database but it's not routinely built. This can be built with the following command:
-
-```bash
-cd ~/vault/external/db_drivers/liblmdb && make
-```
-
-The output of `mdb_stat -ea <path to blockchain dir>` will indicate inconsistencies in the blocks, block_heights and block_info table.
-
-The output of `mdb_dump -s blocks <path to blockchain dir>` and `mdb_dump -s block_info <path to blockchain dir>` is useful for indicating whether blocks and block_info contain the same keys.
-
-These records are dumped as hex data, where the first line is the key and the second line is the data.
-
-## Known Issues
-
-### Protocols
-
-#### Socket-based
-
-Because of the nature of the socket-based protocols that drive vault, certain protocol weaknesses are somewhat unavoidable at this time. While these weaknesses can theoretically be fully mitigated, the effort required (the means) may not justify the ends. As such, please consider taking the following precautions if you are a vault node operator:
-
-- Run `vaultd` on a "secured" machine. If operational security is not your forte, at a very minimum, have a dedicated computer running `vaultd` and **do not** browse the web, use email clients, or use any other potentially harmful apps on your `vaultd` machine. **Do not click links or load URL/MUA content on the same machine**. Doing so may potentially exploit weaknesses in commands which accept "localhost" and "127.0.0.1".
-- If you plan on hosting a public "remote" node, start `vaultd` with `--restricted-rpc`. This is a must.
-
-#### Blockchain-based
-
-Certain blockchain "features" can be considered "bugs" if misused. Consequently, please consider the following:
-
-- When receiving vault, be aware that it may be locked for an arbitrary time if the sender elected to, preventing you from spending that vault until the lock time expires. You may want to hold off acting upon such a transaction until the unlock time lapses. To get a sense of that time, you can consider the remaining blocktime until unlock as seen in the `show_transfers` command.
+The VAULT Project is licensed under the **BSD 3-Clause License**. See [LICENSE](LICENSE) for details.
