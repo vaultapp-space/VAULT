@@ -20,7 +20,7 @@ VAULT is an untraceable, privacy-centric digital currency built on CryptoNote an
 - **𝕏 / Twitter**: [@VaultMessenger](https://x.com/VaultMessenger)
 - **💬 Telegram Community**: [@Vault_Space](https://t.me/Vault_Space)
 - **👾 Discord Server**: [Join Discord Community](https://discord.gg/VZyvT)
-- **🔍 Block Explorer**: [http://8.229.216.134:3000](http://8.229.216.134:3000)
+- **🔍 Block Explorer**: [https://explorer.vaultapp.space](https://explorer.vaultapp.space)
 - **💼 Desktop Core GUI Wallets**: [https://github.com/vaultapp-space/vault-wallets](https://github.com/vaultapp-space/vault-wallets)
 
 ---
@@ -50,7 +50,7 @@ VAULT (`VLT`) is designed for untraceable, borderless, instant private payments.
 | **ZMQ Port** | `29082` | ZeroMQ pub/sub message queue |
 | **Wallet RPC Port** | `29083` | Wallet RPC server port |
 | **Explorer Web Port** | `3000` | Web block explorer |
-| **Seed Node Host** | `8.229.216.134:29081` | Official seed & RPC node |
+| **Seed Node Host** | `node.vaultapp.space:29081` | Official seed & RPC node |
 
 ---
 
@@ -125,7 +125,7 @@ make -j$(nproc)
 
 ### Restore Wallet from 25-Word Mnemonic Seed
 ```bash
-./bin/vault-wallet-cli --daemon-address 8.229.216.134:29081 --restore-deterministic-wallet
+./bin/vault-wallet-cli --daemon-address node.vaultapp.space:29081 --restore-deterministic-wallet
 ```
 
 ---
