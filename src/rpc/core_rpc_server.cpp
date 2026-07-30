@@ -298,7 +298,19 @@ namespace cryptonote
   {
     if(!m_p2p.get_payload_object().is_synchronized())
     {
-      return false;
+      // is_synchronized() only ever flips true from inside the block-download
+      // code path (see cryptonote_protocol_handler.inl), which never runs for
+      // a node that is already at or above the highest height any connected
+      // peer has advertised — e.g. a source/authoritative node that mines its
+      // own blocks and only ever serves peers, never downloads from them.
+      // Such a node can otherwise be permanently stuck "not ready", blocking
+      // mining/tx-relay/etc forever even though it has nothing left to catch
+      // up on. Treat "no known higher target" as vacuously synchronized.
+      uint64_t top_height;
+      crypto::hash top_hash;
+      m_core.get_blockchain_top(top_height, top_hash);
+      if (top_height + 1 < m_core.get_target_blockchain_height())
+        return false;
     }
     return true;
   }

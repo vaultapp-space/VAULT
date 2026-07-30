@@ -129,6 +129,15 @@ test_wallet*
 wallet_*
 *_wallet
 *recovery*.txt
+# wallet_* above is meant to block runtime wallet-data files (e.g.
+# wallet_2024.keys), but as a bare prefix with no extension/path scoping it
+# also matched real source files under src/wallet/ (wallet_rpc_server.cpp,
+# wallet_args.cpp/h, wallet_manager.cpp/h, etc.), silently excluding them
+# from every commit. Explicitly un-ignore the actual source tree.
+!src/wallet/wallet_*.cpp
+!src/wallet/wallet_*.h
+!src/wallet/api/wallet_*.cpp
+!src/wallet/api/wallet_*.h
 
 # SSH keys
 id_rsa*
